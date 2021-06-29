@@ -51,7 +51,7 @@ public class ResendMessage extends Screen {
     @Inject
     protected MessageBundle messageBundle;
     @Inject
-    private DataManager dataManager;
+    protected DataManager dataManager;
 
     public void setMessage(SendingMessage message) {
         this.message = message;
@@ -129,14 +129,11 @@ public class ResendMessage extends Screen {
             return content;
         }
 
-        FileDescriptor contentFile = dataManager.reload(sendingAttachment,
-                ViewBuilder.of(SendingAttachment.class)
-                        .addView(View.LOCAL)
-                        .add("contentFile", View.LOCAL)
-                        .build()
-        ).getContentFile();
-        try {
-            InputStream inputStream = fileLoader.openStream(contentFile);
+        FileDescriptor contentFile = dataManager.load(FileDescriptor.class)
+                .query("select e.contentFile from sys$SendingAttachment e where e.id = :id")
+                .parameter("id", sendingAttachment.getId())
+                .one();
+        try (InputStream inputStream = fileLoader.openStream(contentFile)) {
             content = IOUtils.toByteArray(inputStream);
         } catch (FileStorageException | IOException e) {
             throw new RuntimeException("Can't read content from message attachment", e);
