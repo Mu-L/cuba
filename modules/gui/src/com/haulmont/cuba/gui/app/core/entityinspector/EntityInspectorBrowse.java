@@ -25,9 +25,7 @@ import com.haulmont.chile.core.model.MetaProperty;
 import com.haulmont.chile.core.model.Range;
 import com.haulmont.chile.core.model.Session;
 import com.haulmont.cuba.client.ClientConfig;
-import com.haulmont.cuba.core.app.importexport.EntityImportExportService;
-import com.haulmont.cuba.core.app.importexport.EntityImportView;
-import com.haulmont.cuba.core.app.importexport.ReferenceImportBehaviour;
+import com.haulmont.cuba.core.app.importexport.*;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.SoftDelete;
 import com.haulmont.cuba.core.global.*;
@@ -407,8 +405,8 @@ public class EntityInspectorBrowse extends AbstractLookup {
                 showNotification(importedEntities.size() + " entities imported", NotificationType.HUMANIZED);
             } catch (Exception e) {
                 showNotification(getMessage("importFailed"),
-                                 formatMessage("importFailedMessage", fileName, nullToEmpty(e.getMessage())),
-                                 NotificationType.ERROR);
+                        formatMessage("importFailedMessage", fileName, nullToEmpty(e.getMessage())),
+                        NotificationType.ERROR);
                 log.error("Entities import error", e);
             }
             entitiesDs.refresh();
